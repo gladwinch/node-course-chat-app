@@ -14,10 +14,20 @@ var io = socketIO(server);
 io.on('connection', (socket) => {
   console.log('New user connected');
 
-  socket.on('disconnect', () => {
-    console.log("User disconnected");
+
+  socket.on('createMessage', (message) => {
+    console.log(message);
+    io.emit('newMessage', {
+      text:message.text,
+      from:message.from,
+      createdAt: new Date().getTime()
+    })
   });
-});
+
+  socket.on('disconnect', () => {
+    console.log("User disconnected by gladwin");
+  });
+} );
 
 server.listen(port, () => {
   console.log(`Server is up on port ${port}`);
